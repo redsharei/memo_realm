@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setMemoList() {
         RealmResults<Memo> results = realm.where(Memo.class).findAll();
+        results = results.sort("title");
         List<Memo> items = realm.copyFromRealm(results);
 
         MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
@@ -98,3 +99,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+
+//next->sort done!
