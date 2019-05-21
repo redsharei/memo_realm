@@ -14,10 +14,9 @@
         android:id="@+id/contentText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/titleText"
         android:ellipsize="end"
         android:gravity="end"
         android:lines="1"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
 </RelativeLayout>
