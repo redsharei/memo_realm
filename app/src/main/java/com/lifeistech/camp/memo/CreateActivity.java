@@ -37,6 +37,7 @@ public class CreateActivity extends AppCompatActivity {
         realm.close();
     }
 
+    //作成ボタン
     public void create(View v){
         String title = titleEditText.getText().toString();
 
@@ -45,16 +46,8 @@ public class CreateActivity extends AppCompatActivity {
         String updateDate = sdf.format(date);
 
         String content = contentEditText.getText().toString();
-/*
-        Memo memo = new Memo();
-        memo.title = title;
-        memo.updateDate = updateDate;
-        memo.content = content;
-        Log.d("Memo1",memo.title);
-        Log.d("Memo2",memo.updateDate);
-        Log.d("Memo3",memo.content);
- */
-        save(title,updateDate,content);
+
+        /////////////save(title,updateDate,content);
         //  画面終了
         finish();
     }
@@ -68,8 +61,12 @@ public class CreateActivity extends AppCompatActivity {
                 memo.title = title;
                 memo.updateDate = updateDate;
                 memo.content = content;
+               // memo.free="a";
             }
         });
     }
 
 }
+//updateDate->date
+//start->title
+//end->context
