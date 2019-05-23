@@ -63,6 +63,7 @@ public class MainActivity extends FragmentActivity
         Calendar cal = Calendar.getInstance();
         String str = String.format(Locale.US, "%d/%d/%d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
         final Memo memo = realm.where(Memo.class).equalTo("updateDate", str).findFirst();
+        date_str = str;
         textView1.setText(str);
         try {
             if (memo.updateDate != null) {
@@ -74,6 +75,7 @@ public class MainActivity extends FragmentActivity
                 throw new NullPointerException();
             }
         } catch (NullPointerException e) {
+            textView1.setText(str);
             e.printStackTrace();
         }
 
@@ -145,10 +147,8 @@ public class MainActivity extends FragmentActivity
         textView1.setText(str);
 /*
         final Memo memo = realm.where(Memo.class).equalTo("updateDate", str).findFirst();
-
         try {
             if (memo.updateDate != null) {
-
                 textView2.setText(String.valueOf(memo.free_sum));
                 setMemoList(memo.updateDate);
                 Log.v("date_str", memo.updateDate);
@@ -159,7 +159,6 @@ public class MainActivity extends FragmentActivity
             e.printStackTrace();
         }
                 final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
-
   */
     }
 
@@ -286,9 +285,7 @@ public class MainActivity extends FragmentActivity
             /*
             RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate", date_str).findAll();
             List<Memo> items = realm.copyFromRealm(results);
-
             MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
-
             listView.setAdapter(adapter);
 */
 
