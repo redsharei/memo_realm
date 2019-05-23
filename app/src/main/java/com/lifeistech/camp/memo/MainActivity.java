@@ -111,11 +111,11 @@ public class MainActivity extends FragmentActivity
 
         //data_strはnull
 
-       // setMemoList(date_str);
+        // setMemoList(date_str);
         Log.v("bbb",date_str);
         //final Memo memo = realm.where(Memo.class).equalTo("updateDate",getIntent().getStringExtra("updateDate")).findFirst();
 
-     //
+        //
     }
 
     @Override
@@ -158,18 +158,21 @@ public class MainActivity extends FragmentActivity
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+                final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
+
   */
     }
 
     //realmから削除
     public void deleteMemo() {
-        final RealmResults<Memo> results = realm.where(Memo.class).findAll();
+        final RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate",date_str).findAll();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 results.deleteFromRealm(pos);
                 //results.deleteLastFromRealm();
+
             }
         });
         List<Memo> items = realm.copyFromRealm(results);
@@ -290,7 +293,8 @@ public class MainActivity extends FragmentActivity
 */
 
             setMemoList(date_str);
-           // finish();
+            free_sum = 0;
+            // finish();
             startActivity(getIntent());//onResume画面にいってしまう
         }
 
