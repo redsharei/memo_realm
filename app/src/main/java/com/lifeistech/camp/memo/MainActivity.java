@@ -91,7 +91,24 @@ public class MainActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
-        //setMemoList();
+        Calendar cal = Calendar.getInstance();
+        String str = String.format(Locale.US, "%d/%d/%d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DATE));
+        setMemoList(str);
+
+
+        final Memo memo = realm.where(Memo.class).equalTo("updateDate", str).findFirst();
+        try {
+            if (memo.updateDate != null) {
+
+                textView2.setText(String.valueOf(memo.free_sum));
+
+            } else {
+                throw new NullPointerException();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         /*if(isFirst2){
 
             Calendar calendar = Calendar.getInstance();
@@ -124,12 +141,13 @@ public class MainActivity extends FragmentActivity
     //選択された日付のデータのみ
     public void setMemoList(String str) {
 
-        RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate",str).findAll();
+        RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate", str).findAll();
         List<Memo> items = realm.copyFromRealm(results);
 
         MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
 
         listView.setAdapter(adapter);
+        textView1.setText(str);
     }
 
     //realmから削除
@@ -158,12 +176,22 @@ public class MainActivity extends FragmentActivity
 //日の保存、表示  おｋされた後
         date_str = String.format(Locale.US, "%d/%d/%d", year, monthOfYear + 1, dayOfMonth);
 
-
+        final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
+        try {
+            if (memo.updateDate != null) {
+                textView2.setText(String.valueOf(memo.free_sum));
+            } else {
+                throw new NullPointerException();
+            }
+        } catch (NullPointerException e) {
+            textView2.setText("");
+            e.printStackTrace();
+        }
 
 
 
         setMemoList(date_str);
-        textView1.setText(date_str);
+
         //textView2.setText(String.valueOf(memo.free_sum));  まだデータがない日はデータがない。
 
         //finish();
@@ -214,14 +242,13 @@ public class MainActivity extends FragmentActivity
             int free_part = hourc * 60 + minutec;
 
 
-
-           final Memo memo = realm.where(Memo.class).equalTo("updateDate",date_str).findFirst();
+            final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
             try {
-                if(memo.updateDate != null) {
+                if (memo.updateDate != null) {
 
 
                     //memo.free_sum  realm更新
-                    free_sum = free_part+memo.free_sum;
+                    free_sum = free_part + memo.free_sum;
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -229,15 +256,11 @@ public class MainActivity extends FragmentActivity
                         }
                     });
                     textView2.setText(String.valueOf(free_sum));
-                    Log.d("memo_free",String.valueOf(memo.free_sum));
-                    Log.d("free_sum",String.valueOf(free_sum));
-                    Log.d("date",date_str);
-                    Log.d("free",String.valueOf(memo.free));
 
                 } else {
                     throw new NullPointerException();
                 }
-            } catch(NullPointerException e){
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
 
@@ -248,8 +271,8 @@ public class MainActivity extends FragmentActivity
             save(str1, date_str, str2, free_part, free_sum);
 //            final Memo memo = realm.where(Memo.class).equalTo("time_str_sum",getIntent().getStringExtra("time_str_sum")).findFirst();
 //            textView2.setText(memo.free_sum);
-             //finish();
-             //startActivity(getIntent());
+            //finish();
+            //startActivity(getIntent());
         }
 
 
