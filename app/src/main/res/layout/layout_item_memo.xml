@@ -18,8 +18,9 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:gravity="end"
-        android:lines="1"
         android:textSize="18sp"
         android:paddingEnd="20dp"/>
+    <!--android:lines="1"-->
+
 
 </RelativeLayout>
