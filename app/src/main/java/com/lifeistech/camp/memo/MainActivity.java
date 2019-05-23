@@ -44,6 +44,7 @@ public class MainActivity extends FragmentActivity
     int minute2 = 0;
     int hour_sum = 0;
     int minute_sum = 0;
+    int free_sum = 0;
     static final int num = 1;
     private boolean isFirst = true;
     private boolean isFirst2 = true;
@@ -121,27 +122,14 @@ public class MainActivity extends FragmentActivity
 
     //dateでデータを絞りたい！！where
     //選択された日付のデータのみ
-    public void setMemoList() {
-      //  RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate",true).findAll();
-        //final Memo memo = realm.where(Memo.class).equalTo("updateDate",true).findFirst();
+    public void setMemoList(String str) {
 
-        RealmResults<Memo> results = realm.where(Memo.class).findAll();
-        /*try {
-            if(memo.updateDate != null) {
-                Log.d("date",memo.updateDate);
-            } else {
-                throw new NullPointerException();
-            }
-        } catch(NullPointerException e) {
-            e.printStackTrace();
-        }*/
-        results = results.sort("title");
+        RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate",str).findAll();
         List<Memo> items = realm.copyFromRealm(results);
 
         MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
 
         listView.setAdapter(adapter);
-
     }
 
     //realmから削除
@@ -172,22 +160,9 @@ public class MainActivity extends FragmentActivity
 
 
 
-        RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate",date_str).findAll();
-        final Memo memo = realm.where(Memo.class).equalTo("updateDate",date_str).findFirst();
-        List<Memo> items = realm.copyFromRealm(results);
-
-        MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
-
-        listView.setAdapter(adapter);
 
 
-
-
-
-        //setMemoList(STRING);にすればいいんちゃいますか？String = date_strを渡してあげて.
-
-
-        //setMemoList();
+        setMemoList(date_str);
         textView1.setText(date_str);
         //textView2.setText(String.valueOf(memo.free_sum));  まだデータがない日はデータがない。
 
@@ -234,18 +209,47 @@ public class MainActivity extends FragmentActivity
             }
 
             str2 = String.valueOf(String.format("%02d", hourOfDay)) + ":" + String.valueOf(String.format("%02d", minute));
-            hour_sum += hourc;
-            minute_sum += minutec;
+            //hour_sum += hourc;
+            //minute_sum += minutec;
             int free_part = hourc * 60 + minutec;
-            int free_sum = hour_sum * 60 + minute_sum;
+
+
+
+           final Memo memo = realm.where(Memo.class).equalTo("updateDate",date_str).findFirst();
+            try {
+                if(memo.updateDate != null) {
+
+
+                    //memo.free_sum  realm更新
+                    free_sum = free_part+memo.free_sum;
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            memo.free_sum = free_sum;
+                        }
+                    });
+                    textView2.setText(String.valueOf(free_sum));
+                    Log.d("memo_free",String.valueOf(memo.free_sum));
+                    Log.d("free_sum",String.valueOf(free_sum));
+                    Log.d("date",date_str);
+                    Log.d("free",String.valueOf(memo.free));
+
+                } else {
+                    throw new NullPointerException();
+                }
+            } catch(NullPointerException e){
+                e.printStackTrace();
+            }
+
+
             isFirst = true;
             String time_str_sum = String.valueOf(String.format("%02d", hour_sum)) + ":" + String.valueOf(String.format("%02d", minute_sum));
-            textView2.setText(String.valueOf(free_part));
+
             save(str1, date_str, str2, free_part, free_sum);
 //            final Memo memo = realm.where(Memo.class).equalTo("time_str_sum",getIntent().getStringExtra("time_str_sum")).findFirst();
 //            textView2.setText(memo.free_sum);
-             finish();
-             startActivity(getIntent());
+             //finish();
+             //startActivity(getIntent());
         }
 
 
