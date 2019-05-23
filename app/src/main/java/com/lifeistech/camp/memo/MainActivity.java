@@ -53,7 +53,6 @@ public class MainActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // RealmConfiguration config = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build();
         realm = Realm.getDefaultInstance();
 
         listView = (ListView) findViewById(R.id.listView);
@@ -91,9 +90,13 @@ public class MainActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
+
         Calendar cal = Calendar.getInstance();
-        String str = String.format(Locale.US, "%d/%d/%d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DATE));
-        setMemoList(str);
+        String str = String.format(Locale.US, "%d/%d/%d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
+        Log.v("str", str);
+        Log.v("aaa", "1");
+        Log.v("bbb","");
+        //data_strはnull
 
 
         final Memo memo = realm.where(Memo.class).equalTo("updateDate", str).findFirst();
@@ -101,7 +104,8 @@ public class MainActivity extends FragmentActivity
             if (memo.updateDate != null) {
 
                 textView2.setText(String.valueOf(memo.free_sum));
-
+                setMemoList(date_str);
+                Log.v("date_str", memo.updateDate);
             } else {
                 throw new NullPointerException();
             }
@@ -109,14 +113,7 @@ public class MainActivity extends FragmentActivity
             e.printStackTrace();
         }
 
-        /*if(isFirst2){
 
-            Calendar calendar = Calendar.getInstance();
-
-        }else{
-
-        }
-*/
     }
 
     @Override
@@ -131,13 +128,8 @@ public class MainActivity extends FragmentActivity
     }
 
     //realmからデータを取ってきている
-/*
-    @NonNull
-    protected RealmResults<Memo> results (Realm realm){
-        return realm.where(Memo.class).equalTo("updateDate",true).findAll();
-    }*/
 
-    //dateでデータを絞りたい！！where
+
     //選択された日付のデータのみ
     public void setMemoList(String str) {
 
@@ -147,6 +139,7 @@ public class MainActivity extends FragmentActivity
         MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
 
         listView.setAdapter(adapter);
+        date_str = str;
         textView1.setText(str);
     }
 
@@ -189,10 +182,8 @@ public class MainActivity extends FragmentActivity
         }
 
 
-
         setMemoList(date_str);
 
-        //textView2.setText(String.valueOf(memo.free_sum));  まだデータがない日はデータがない。
 
         //finish();
         //startActivity(getIntent());
@@ -269,37 +260,17 @@ public class MainActivity extends FragmentActivity
             String time_str_sum = String.valueOf(String.format("%02d", hour_sum)) + ":" + String.valueOf(String.format("%02d", minute_sum));
 
             save(str1, date_str, str2, free_part, free_sum);
-//            final Memo memo = realm.where(Memo.class).equalTo("time_str_sum",getIntent().getStringExtra("time_str_sum")).findFirst();
-//            textView2.setText(memo.free_sum);
-            //finish();
-            //startActivity(getIntent());
+            finish();
+            startActivity(getIntent());//onResume画面にいってしまう
         }
 
-
-        //////時間取って来る
-//realmに日,時間を保存
-        /*
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm bgRealm) {
-                Memo memo = realm.createObject(Memo.class);
-                memo.date = date_str;
-            }
-        });*/
     }
 
     public void showTimePickerDialog1(View v) {
         DialogFragment newFragment = new TimePick();
         newFragment.show(getSupportFragmentManager(), "timePicker1");
     }
-/*
-    public void showTimePickerDialog2(View v) {
-        DialogFragment newFragment = new TimePick();
-        newFragment.show(getSupportFragmentManager(), "timePicker2");
-    }
-*/
 
-    //   public void save(final String title, final String updateDate, final String content) {
     public void save(final String title, final String updateDate, final String content, final int free, final int free_sum) {
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -330,7 +301,7 @@ public class MainActivity extends FragmentActivity
 //free timeたちをStringでなくint(分)で保存してdone!、表示するときに商と余りで計算すればok
 //保存したでーたをTextViewでshowしたい
 
-//next->sort done!
+//sort done!
 //realm 要素一つ追加 done!
 //timepickで時間を取って来る done!
 //datepickedのとき、データを取得したい。whereでデータを絞るところから。done!
