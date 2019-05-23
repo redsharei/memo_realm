@@ -69,7 +69,7 @@ public class MainActivity extends FragmentActivity
             if (memo.updateDate != null) {
 
                 setMemoList(str);
-                textView2.setText(String.valueOf(memo.free_sum));
+                textView2.setText(chan(memo.free_sum));
                 //                Log.v("date_str", memo.updateDate);
             } else {
                 throw new NullPointerException();
@@ -114,7 +114,7 @@ public class MainActivity extends FragmentActivity
                 });
                 //Log.d("free_sum", String.valueOf(memo.free_sum));
 
-                textView2.setText(String.valueOf(memo.free_sum));
+                textView2.setText(chan(memo.free_sum));
 
                 pos = position;
                 deleteMemo();
@@ -231,7 +231,7 @@ public class MainActivity extends FragmentActivity
         try {
             if (memo.updateDate != null) {
                 //Log.v("ondateSet", String.valueOf(memo.free_sum));
-                textView2.setText(String.valueOf(memo.free_sum));
+                textView2.setText(chan(memo.free_sum));
             } else {
                 throw new NullPointerException();
             }
@@ -307,7 +307,7 @@ public class MainActivity extends FragmentActivity
                             }
                         }
                     });
-                    textView2.setText(String.valueOf(free_sum));
+                    textView2.setText(chan(free_sum));
                     Log.d("onTimeSet", "onTimeSet=" + memo.free_sum);
 
                 } else {
@@ -316,7 +316,7 @@ public class MainActivity extends FragmentActivity
             } catch (NullPointerException e) {
                 free_sum = free_part;
 
-                textView2.setText(String.valueOf(free_part));
+                textView2.setText(chan(1440-free_sum));
                 e.printStackTrace();
 
             }
@@ -378,10 +378,11 @@ public class MainActivity extends FragmentActivity
 }
 
 
-//next->でーた消したときに、free_timeも引かねば!!
-
+//next->
 
 //listviewクリックしたときに、timepickでデータ変更
+//時間1>時間2の時の処理
+
 
 // S start_time | S date |S end_time | int free (その時間) | int free_sum (その日)
 
@@ -396,3 +397,4 @@ public class MainActivity extends FragmentActivity
 //日付を選んで、その日の時間が表示される。
 //onResume処理
 //保存したでーたをTextViewでshowしたい
+//でーた消したときに、free_timeも引かねば!!
