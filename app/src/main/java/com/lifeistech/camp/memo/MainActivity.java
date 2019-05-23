@@ -69,7 +69,7 @@ public class MainActivity extends FragmentActivity
             if (memo.updateDate != null) {
 
                 setMemoList(str);
-                textView2.setText(chan(memo.free_sum));
+                textView2.setText(chan(1440-memo.free_sum));
                 //                Log.v("date_str", memo.updateDate);
             } else {
                 throw new NullPointerException();
@@ -108,13 +108,13 @@ public class MainActivity extends FragmentActivity
                     @Override
                     public void execute(Realm realm) {
                         for (Memo memo : results) {
-                            memo.free_sum += memo1.free;
+                            memo.free_sum -= memo1.free;
                         }
                     }
                 });
                 //Log.d("free_sum", String.valueOf(memo.free_sum));
 
-                textView2.setText(chan(memo.free_sum));
+                textView2.setText(chan(1440-memo.free_sum));
 
                 pos = position;
                 deleteMemo();
@@ -231,7 +231,7 @@ public class MainActivity extends FragmentActivity
         try {
             if (memo.updateDate != null) {
                 //Log.v("ondateSet", String.valueOf(memo.free_sum));
-                textView2.setText(chan(memo.free_sum));
+                textView2.setText(chan(1440-memo.free_sum));
             } else {
                 throw new NullPointerException();
             }
@@ -298,7 +298,11 @@ public class MainActivity extends FragmentActivity
 
 
                     //memo.free_sum  realm更新
-                    free_sum = 1440-(free_part + memo.free_sum);
+                    //if(free_part==0){
+                       // free_sum = memo.free_sum;
+                    //}else {
+                        free_sum = free_part + memo.free_sum;
+                    //}
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -307,7 +311,7 @@ public class MainActivity extends FragmentActivity
                             }
                         }
                     });
-                    textView2.setText(chan(free_sum));
+                    textView2.setText(chan(1440-free_sum));
                     Log.d("onTimeSet", "onTimeSet=" + memo.free_sum);
 
                 } else {
