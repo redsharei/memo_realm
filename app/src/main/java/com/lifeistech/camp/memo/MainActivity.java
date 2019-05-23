@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,12 +14,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,13 +46,13 @@ public class MainActivity extends FragmentActivity
     int minute_sum = 0;
     static final int num = 1;
     private boolean isFirst = true;
-
+    private boolean isFirst2 = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // RealmConfiguration config = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build();
+        // RealmConfiguration config = new RealmConfiguration.Builder().deleteRealmIfMigrationNeeded().build();
         realm = Realm.getDefaultInstance();
 
         listView = (ListView) findViewById(R.id.listView);
@@ -57,7 +60,7 @@ public class MainActivity extends FragmentActivity
         textView2 = (TextView) findViewById(R.id.textView2);
 
 
-        //clicked
+        //clicked 変更をするところ
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -87,7 +90,15 @@ public class MainActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
-        setMemoList();
+        //setMemoList();
+        /*if(isFirst2){
+
+            Calendar calendar = Calendar.getInstance();
+
+        }else{
+
+        }
+*/
     }
 
     @Override
@@ -102,14 +113,35 @@ public class MainActivity extends FragmentActivity
     }
 
     //realmからデータを取ってきている
+/*
+    @NonNull
+    protected RealmResults<Memo> results (Realm realm){
+        return realm.where(Memo.class).equalTo("updateDate",true).findAll();
+    }*/
+
+    //dateでデータを絞りたい！！where
+    //選択された日付のデータのみ
     public void setMemoList() {
+      //  RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate",true).findAll();
+        //final Memo memo = realm.where(Memo.class).equalTo("updateDate",true).findFirst();
+
         RealmResults<Memo> results = realm.where(Memo.class).findAll();
+        /*try {
+            if(memo.updateDate != null) {
+                Log.d("date",memo.updateDate);
+            } else {
+                throw new NullPointerException();
+            }
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+        }*/
         results = results.sort("title");
         List<Memo> items = realm.copyFromRealm(results);
 
         MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
 
         listView.setAdapter(adapter);
+
     }
 
     //realmから削除
@@ -134,10 +166,31 @@ public class MainActivity extends FragmentActivity
     //PickDate
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        //saveはしない！！
 //日の保存、表示  おｋされた後
         date_str = String.format(Locale.US, "%d/%d/%d", year, monthOfYear + 1, dayOfMonth);
 
+
+
+        RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate",date_str).findAll();
+        final Memo memo = realm.where(Memo.class).equalTo("updateDate",date_str).findFirst();
+        List<Memo> items = realm.copyFromRealm(results);
+
+        MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
+
+        listView.setAdapter(adapter);
+
+
+
+
+
+        //setMemoList(STRING);にすればいいんちゃいますか？String = date_strを渡してあげて.
+
+
+        //setMemoList();
         textView1.setText(date_str);
+        //textView2.setText(String.valueOf(memo.free_sum));  まだデータがない日はデータがない。
+
         //finish();
         //startActivity(getIntent());
     }
@@ -183,15 +236,16 @@ public class MainActivity extends FragmentActivity
             str2 = String.valueOf(String.format("%02d", hourOfDay)) + ":" + String.valueOf(String.format("%02d", minute));
             hour_sum += hourc;
             minute_sum += minutec;
-            int free_part = hourc*60 + minutec;
+            int free_part = hourc * 60 + minutec;
+            int free_sum = hour_sum * 60 + minute_sum;
             isFirst = true;
             String time_str_sum = String.valueOf(String.format("%02d", hour_sum)) + ":" + String.valueOf(String.format("%02d", minute_sum));
             textView2.setText(String.valueOf(free_part));
-            save(str1,date_str,str2,free_part,time_str_sum);
+            save(str1, date_str, str2, free_part, free_sum);
 //            final Memo memo = realm.where(Memo.class).equalTo("time_str_sum",getIntent().getStringExtra("time_str_sum")).findFirst();
 //            textView2.setText(memo.free_sum);
-           // finish();
-            //startActivity(getIntent());
+             finish();
+             startActivity(getIntent());
         }
 
 
@@ -219,7 +273,7 @@ public class MainActivity extends FragmentActivity
 */
 
     //   public void save(final String title, final String updateDate, final String content) {
-    public void save(final String title, final String updateDate, final String content, final int free,final String free_sum) {
+    public void save(final String title, final String updateDate, final String content, final int free, final int free_sum) {
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -229,24 +283,29 @@ public class MainActivity extends FragmentActivity
 
                 memo.updateDate = updateDate;
                 memo.content = content;
-                memo.free=free;
+                memo.free = free;
                 memo.free_sum = free_sum;
-        //        textView1.setText(memo.updateDate);
             }
         });
-    }
 
+    }
 
 }
 
-//next->sort done!
-//timepickで時間を取って来る
-//日と時間の紐づけ
-//realm 要素一つ追加
-//日付を選んで、その日の時間が表示される。
-//でーた消したときに、free_timeも引かねば
 
-// date | start_time | end_time | free その時間 | free_sum その日
+//next->onResume処理
 
-//free timeたちをStringでなくint(分)で保存して、表示するときに商と余りで計算すればok
+//でーた消したときに、free_timeも引かねば!!
+//listviewクリックしたときに、timepickでデータ変更
+
+// S start_time | S date |S end_time | int free (その時間) | int free_sum (その日)
+
+//free timeたちをStringでなくint(分)で保存してdone!、表示するときに商と余りで計算すればok
 //保存したでーたをTextViewでshowしたい
+
+//next->sort done!
+//realm 要素一つ追加 done!
+//timepickで時間を取って来る done!
+//datepickedのとき、データを取得したい。whereでデータを絞るところから。done!
+//日と時間の紐づけ maybe done!
+//日付を選んで、その日の時間が表示される。

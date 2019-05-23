@@ -7,7 +7,7 @@ public class Memo extends RealmObject {
     public String updateDate;
     public String content;
     public int free;
-    public String free_sum;
+    public int free_sum;
 
 
 }

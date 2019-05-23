@@ -8,7 +8,7 @@
         android:id="@+id/titleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/contentText"
@@ -17,6 +17,6 @@
         android:ellipsize="end"
         android:gravity="end"
         android:lines="1"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
 </RelativeLayout>
