@@ -59,7 +59,7 @@ public class CreateActivity extends AppCompatActivity {
             public void execute(Realm bgRealm) {
                 Memo memo = realm.createObject(Memo.class);
                 memo.title = title;
-                memo.updateDate = updateDate;
+               // memo.updateDate = updateDate;
                 memo.content = content;
                // memo.free="a";
             }

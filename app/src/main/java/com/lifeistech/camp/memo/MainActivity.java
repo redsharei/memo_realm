@@ -62,11 +62,11 @@ public class MainActivity extends FragmentActivity
 
         Calendar cal = Calendar.getInstance();
         String str = String.format(Locale.US, "%d/%d/%d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
-        final Memo memo = realm.where(Memo.class).equalTo("updateDate", str).findFirst();
+        final Memo memo = realm.where(Memo.class).equalTo("Date", str).findFirst();
         date_str = str;
         textView1.setText(str);
         try {
-            if (memo.updateDate != null) {
+            if (memo.Date != null) {
 
                 setMemoList(str);
                 textView2.setText(chan(1440 - memo.free_sum));
@@ -96,8 +96,8 @@ public class MainActivity extends FragmentActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
-                final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
-                final RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate", date_str).findAll();
+                final Memo memo = realm.where(Memo.class).equalTo("Date", date_str).findFirst();
+                final RealmResults<Memo> results = realm.where(Memo.class).equalTo("Date", date_str).findAll();
 
                 final Memo memo1 = (Memo) parent.getItemAtPosition(position);
                 adapter.remove(memo1);
@@ -136,18 +136,18 @@ public class MainActivity extends FragmentActivity
         realm.close();
     }
 
-    public void create(View v) {
+   /* public void create(View v) {
         Intent intent = new Intent(this, CreateActivity.class);
         startActivity(intent);
     }
-
+*/
     //realmからデータを取ってきている
 
 
     //選択された日付のデータのみ
     public void setMemoList(String str) {
 
-        RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate", str).findAll();
+        RealmResults<Memo> results = realm.where(Memo.class).equalTo("Date", str).findAll();
         results = results.sort("title");
         List<Memo> items = realm.copyFromRealm(results);
 
@@ -162,9 +162,9 @@ public class MainActivity extends FragmentActivity
 
     //realmから削除
     public void deleteMemo() {
-        final RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate", date_str).findAll();
+        final RealmResults<Memo> results = realm.where(Memo.class).equalTo("Date", date_str).findAll();
 
-        final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
+        final Memo memo = realm.where(Memo.class).equalTo("Date", date_str).findFirst();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -192,9 +192,9 @@ public class MainActivity extends FragmentActivity
 //日の保存、表示  おｋされた後
         date_str = String.format(Locale.US, "%d/%d/%d", year, monthOfYear + 1, dayOfMonth);
 
-        final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
+        final Memo memo = realm.where(Memo.class).equalTo("Date", date_str).findFirst();
         try {
-            if (memo.updateDate != null) {
+            if (memo.Date != null) {
                 //Log.v("ondateSet", String.valueOf(memo.free_sum));
                 textView2.setText(chan(1440 - memo.free_sum));
             } else {
@@ -253,10 +253,10 @@ public class MainActivity extends FragmentActivity
 
             int free_part = hourc * 60 + minutec;
 
-            final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
-            final RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate", date_str).findAll();
+            final Memo memo = realm.where(Memo.class).equalTo("Date", date_str).findFirst();
+            final RealmResults<Memo> results = realm.where(Memo.class).equalTo("Date", date_str).findAll();
             try {
-                if (memo.updateDate != null) {
+                if (memo.Date != null) {
                     free_sum = free_part + memo.free_sum;
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -301,7 +301,7 @@ public class MainActivity extends FragmentActivity
         newFragment.show(getSupportFragmentManager(), "timePicker1");
     }
 
-    public void save(final String title, final String updateDate, final String content, final int free, final int free_sum) {
+    public void save(final String title, final String Date, final String content, final int free, final int free_sum) {
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -309,7 +309,7 @@ public class MainActivity extends FragmentActivity
                 Memo memo = realm.createObject(Memo.class);
                 memo.title = title;
 
-                memo.updateDate = updateDate;
+                memo.Date = Date;
                 memo.content = content;
                 memo.free = free;
                 memo.free_sum = free_sum;
