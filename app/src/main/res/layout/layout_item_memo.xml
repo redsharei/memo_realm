@@ -2,24 +2,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#C3F0F0F0"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/titleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:fontFamily="sans-serif-smallcaps"
         android:paddingStart="20dp"
-/>
+        android:textColor="#263238"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/contentText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
+        android:fontFamily="sans-serif-smallcaps"
         android:gravity="end"
-        android:textSize="18sp"
-        android:paddingEnd="20dp"/>
+        android:paddingEnd="20dp"
+        android:textColor="#263238"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/yotei"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/contentText"
+        android:gravity="end" />
+
     <!--android:lines="1"-->
 
 

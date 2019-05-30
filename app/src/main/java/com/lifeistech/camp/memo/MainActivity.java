@@ -69,8 +69,7 @@ public class MainActivity extends FragmentActivity
             if (memo.updateDate != null) {
 
                 setMemoList(str);
-                textView2.setText(chan(1440-memo.free_sum));
-                //                Log.v("date_str", memo.updateDate);
+                textView2.setText(chan(1440 - memo.free_sum));
             } else {
                 throw new NullPointerException();
             }
@@ -112,16 +111,15 @@ public class MainActivity extends FragmentActivity
                         }
                     }
                 });
-                //Log.d("free_sum", String.valueOf(memo.free_sum));
 
-                textView2.setText(chan(1440-memo.free_sum));
+
+                textView2.setText(chan(1440 - memo.free_sum));
 
                 pos = position;
+                Log.d("position", String.valueOf(pos));
+
                 deleteMemo();
 
-                //  Log.d("date_in_Long", date_str);
-                // Log.d("memo1.free_in_Long", String.valueOf(memo1.free));
-                //  Log.d("free_sum_after", String.valueOf(memo.free_sum));
                 return true;
             }
         });
@@ -130,14 +128,6 @@ public class MainActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
-
-        //data_strはnull
-
-        // setMemoList(date_str);
-        // Log.v("bbb", date_str);
-        //final Memo memo = realm.where(Memo.class).equalTo("updateDate",getIntent().getStringExtra("updateDate")).findFirst();
-
-        //
     }
 
     @Override
@@ -167,45 +157,23 @@ public class MainActivity extends FragmentActivity
         listView.setAdapter(adapter);
         date_str = str;
         textView1.setText(str);
-/*
-        final Memo memo = realm.where(Memo.class).equalTo("updateDate", str).findFirst();
-        try {
-            if (memo.updateDate != null) {
-                textView2.setText(String.valueOf(memo.free_sum));
-                setMemoList(memo.updateDate);
-                Log.v("date_str", memo.updateDate);
-            } else {
-                throw new NullPointerException();
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-                final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
-  */
+
     }
 
     //realmから削除
     public void deleteMemo() {
         final RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate", date_str).findAll();
+
         final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
 
-        //if (pos == 0) {
-
-        //   Log.d("aaa", "aaaaa");
-        //} else {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                //Memo memo = results.get(pos);
-                //memo.deleteFromRealm();
                 results.deleteFromRealm(pos);
-                //results.deleteLastFromRealm();
-
             }
         });
 
 
-        //}
         List<Memo> items = realm.copyFromRealm(results);
 
         MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
@@ -213,10 +181,7 @@ public class MainActivity extends FragmentActivity
         listView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
-        //   Log.d("date_in_del", date_str);
-        //  Log.d("aaaaaaaaaaaaaa", String.valueOf(pos));
-//        Log.d("memo1.free_in_del", String.valueOf(memo.free));
-        //       Log.d("memo1.free_sum_in_del", String.valueOf(memo.free_sum));  1行目だ！
+
     }
 
 
@@ -231,7 +196,7 @@ public class MainActivity extends FragmentActivity
         try {
             if (memo.updateDate != null) {
                 //Log.v("ondateSet", String.valueOf(memo.free_sum));
-                textView2.setText(chan(1440-memo.free_sum));
+                textView2.setText(chan(1440 - memo.free_sum));
             } else {
                 throw new NullPointerException();
             }
@@ -244,8 +209,6 @@ public class MainActivity extends FragmentActivity
         setMemoList(date_str);
 
 
-        //finish();
-        //startActivity(getIntent());
     }
 
 
@@ -287,22 +250,14 @@ public class MainActivity extends FragmentActivity
             }
 
             str2 = String.valueOf(String.format("%02d", hourOfDay)) + ":" + String.valueOf(String.format("%02d", minute));
-            //hour_sum += hourc;
-            //minute_sum += minutec;
+
             int free_part = hourc * 60 + minutec;
 
             final Memo memo = realm.where(Memo.class).equalTo("updateDate", date_str).findFirst();
             final RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate", date_str).findAll();
             try {
                 if (memo.updateDate != null) {
-
-
-                    //memo.free_sum  realm更新
-                    //if(free_part==0){
-                       // free_sum = memo.free_sum;
-                    //}else {
-                        free_sum = free_part + memo.free_sum;
-                    //}
+                    free_sum = free_part + memo.free_sum;
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -311,7 +266,7 @@ public class MainActivity extends FragmentActivity
                             }
                         }
                     });
-                    textView2.setText(chan(1440-free_sum));
+                    textView2.setText(chan(1440 - free_sum));
                     Log.d("onTimeSet", "onTimeSet=" + memo.free_sum);
 
                 } else {
@@ -320,7 +275,7 @@ public class MainActivity extends FragmentActivity
             } catch (NullPointerException e) {
                 free_sum = free_part;
 
-                textView2.setText(chan(1440-free_sum));
+                textView2.setText(chan(1440 - free_sum));
                 e.printStackTrace();
 
             }
@@ -333,13 +288,6 @@ public class MainActivity extends FragmentActivity
             String time_str_sum = String.valueOf(String.format("%02d", hour_sum)) + ":" + String.valueOf(String.format("%02d", minute_sum));
 
 
-            /*
-            RealmResults<Memo> results = realm.where(Memo.class).equalTo("updateDate", date_str).findAll();
-            List<Memo> items = realm.copyFromRealm(results);
-            MemoAdapter adapter = new MemoAdapter(this, R.layout.layout_item_memo, items);
-            listView.setAdapter(adapter);
-*/
-            // Log.d("onTimeSet","onTimeSet="+memo.free_sum);
             setMemoList(date_str);
             free_sum = 0;
             // finish();
@@ -365,35 +313,33 @@ public class MainActivity extends FragmentActivity
                 memo.content = content;
                 memo.free = free;
                 memo.free_sum = free_sum;
+                memo.yotei = "";
             }
         });
 
     }
 
-    public String chan(int t){
+    public String chan(int t) {
         String s;
-        int a,b;
-        a = t/60;
-        b=t%60;
-        s = String.valueOf(String.format("%02d",a )) + ":" + String.valueOf(String.format("%02d",b));
+        int a, b;
+        a = t / 60;
+        b = t % 60;
+        s = String.valueOf(String.format("%02d", a)) + ":" + String.valueOf(String.format("%02d", b));
         return s;
     }
 
 }
 
 
-//next->
+//next->sortしてから消す
 
 //listviewクリックしたときに、timepickでデータ変更
 //時間1>時間2の時の処理
-
+//sort  posは変わらない
 
 // S start_time | S date |S end_time | int free (その時間) | int free_sum (その日)
 
-//free timeたちをStringでなくint(分)で保存してdone!、表示するときに商と余りで計算すればok
-//24時間から引く!!
 
-//sort done!
 //realm 要素一つ追加 done!
 //timepickで時間を取って来る done!
 //datepickedのとき、データを取得したい。whereでデータを絞るところから。done!
@@ -402,3 +348,5 @@ public class MainActivity extends FragmentActivity
 //onResume処理
 //保存したでーたをTextViewでshowしたい
 //でーた消したときに、free_timeも引かねば!!
+//free timeたちをStringでなくint(分)で保存してdone!、表示するときに商と余りで計算すればok
+//24時間から引く!!

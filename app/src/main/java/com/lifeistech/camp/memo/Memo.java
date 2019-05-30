@@ -8,6 +8,7 @@ public class Memo extends RealmObject {
     public String content;
     public int free;
     public int free_sum;
+    public String yotei;
 
 
 }

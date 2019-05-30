@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/hougan"
 
     >
 
@@ -11,36 +10,41 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView9"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="#FFFFFF"
-            android:backgroundTint="#FFFFFF" />
+            android:background="#6f79a8" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="7dp"
+            android:background="#9fa8da" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F0FFFFFF"
+            android:background="#9fa8da"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView14"
                 android:layout_width="5dp"
                 android:layout_height="41dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="#9fa8da" />
 
             <Button
                 android:id="@+id/button3"
-                android:layout_width="98dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
-                android:background="@drawable/frame_style"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="#9fa8da"
+                android:fontFamily="sans-serif-smallcaps"
                 android:lines="1"
                 android:onClick="showDatePickerDialog"
                 android:paddingLeft="8dp"
@@ -48,7 +52,7 @@
                 android:paddingRight="8dp"
                 android:paddingBottom="8dp"
                 android:text="Date >"
-                android:textColor="#2196F3" />
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -56,8 +60,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="#00BCD4"
+                android:fontFamily="sans-serif-smallcaps"
                 android:text="TextView"
                 android:textAlignment="center"
+                android:textColor="#263238"
                 android:textSize="30sp" />
         </LinearLayout>
 
@@ -65,14 +71,34 @@
             android:id="@+id/textView13"
             android:layout_width="match_parent"
             android:layout_height="7dp"
-            android:background="#FFFFFF" />
+            android:background="#9fa8da" />
 
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="                 始まり                       　　　　　      　                       　      終わり"
-            android:textSize="10sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Start"
+                android:textAlignment="textStart"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="45dp"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="end"
+                android:textAlignment="textEnd" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/listView"
@@ -82,14 +108,15 @@
         <TextView
             android:id="@+id/textView10"
             android:layout_width="match_parent"
-            android:layout_height="13dp"
-            android:text="------------------------------------------------------------------------------------------" />
+            android:layout_height="13dp" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="  本日の空き時間"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="    Spare Time"
+            android:textColor="#263238"
             android:textSize="18sp" />
 
         <TextView
@@ -101,7 +128,9 @@
             android:id="@+id/textView2"
             android:layout_width="294dp"
             android:layout_height="72dp"
+            android:fontFamily="sans-serif-smallcaps"
             android:textAlignment="center"
+            android:textColor="#263238"
             android:textSize="36sp" />
 
     </LinearLayout>
@@ -118,6 +147,7 @@
         android:onClick="showTimePickerDialog1"
         android:src="@drawable/ic_plus"
         android:text="作成"
+        app:backgroundTint="#ff8a80"
         app:fabSize="normal" />
 
 </RelativeLayout>
